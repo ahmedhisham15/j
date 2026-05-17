@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hard Java Tracing Questions</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --card2: #1f2937;
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --main: #38bdf8;
+      --accent: #22c55e;
+      --border: rgba(255,255,255,0.12);
+      --code: #020617;
+      --warning: #facc15;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: radial-gradient(circle at top, #1e3a8a 0%, var(--bg) 45%, #020617 100%);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 30px 15px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 35px;
+      padding: 35px 20px;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background: rgba(15, 23, 42, 0.75);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    header h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      color: var(--main);
+      margin-bottom: 10px;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 750px;
+      margin: auto;
+    }
+
+    .instructions {
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      padding: 20px;
+      border-radius: 22px;
+      margin-bottom: 25px;
+    }
+
+    .instructions h2 {
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .question {
+      background: linear-gradient(180deg, rgba(31, 41, 55, 0.95), rgba(17, 24, 39, 0.95));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 25px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    }
+
+    .question h2 {
+      color: var(--warning);
+      margin-bottom: 12px;
+      font-size: 1.5rem;
+    }
+
+    .task {
+      color: var(--muted);
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    pre {
+      background: var(--code);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      overflow-x: auto;
+      margin-bottom: 18px;
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+      white-space: pre;
+    }
+
+    .answer-box {
+      border: 2px dashed rgba(56, 189, 248, 0.45);
+      border-radius: 18px;
+      min-height: 90px;
+      padding: 15px;
+      color: var(--muted);
+      background: rgba(2, 6, 23, 0.45);
+    }
+
+    .answer-box strong {
+      color: var(--main);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 35px;
+      padding: 25px;
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+      header, .question, .instructions {
+        background: white;
+        color: black;
+        box-shadow: none;
+        border: 1px solid #999;
+      }
+      header h1, .question h2, .instructions h2 {
+        color: black;
+      }
+      pre {
+        background: #f4f4f4;
+        color: black;
+      }
+      code {
+        color: black;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Hard Java Tracing Questions</h1>
+      <p>15 difficult exam-style Java tracing questions. For each question, write the exact output or write Compile-Time Error / Runtime Error.</p>
+    </header>
+
+    <section class="instructions">
+      <h2>How to Solve</h2>
+      <p>Trace line by line. Pay attention to constructor chaining, static vs instance variables, method overriding, method overloading, exceptions, ArrayList removal, autoboxing, and String comparison.</p>
+    </section>
+
+    <section class="question">
+      <h2>Q1</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>class A {
+    static int x = 1;
+    int y = 1;
+
+    A() {
+        x++;
+        y++;
+        System.out.println("A " + x + " " + y);
+    }
+}
+
+class B extends A {
+    B() {
+        x += 2;
+        y += 2;
+        System.out.println("B " + x + " " + y);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        B b1 = new B();
+        B b2 = new B();
+
+        System.out.println(b1.x + " " + b1.y);
+        System.out.println(b2.x + " " + b2.y);
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q2</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>class Parent {
+    Parent() {
+        System.out.println("Parent()");
+    }
+
+    Parent(String s) {
+        this();
+        System.out.println("Parent(String): " + s);
+    }
+}
+
+class Child extends Parent {
+    Child() {
+        this(5);
+        System.out.println("Child()");
+    }
+
+    Child(int x) {
+        super("Java");
+        System.out.println("Child(int): " + x);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        new Child();
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q3</h2>
+      <p class="task">Determine the exact output or error.</p>
+      <pre><code>class Test {
+    static void fun(int x) {
+        System.out.println("int");
+    }
+
+    static void fun(double x) {
+        System.out.println("double");
+    }
+
+    static void fun(Integer x) {
+        System.out.println("Integer");
+    }
+
+    static void fun(Object x) {
+        System.out.println("Object");
+    }
+
+    public static void main(String[] args) {
+        fun(10);
+        fun(10.5);
+        fun(Integer.valueOf(20));
+        fun(null);
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q4</h2>
+      <p class="task">Determine the exact output or error.</p>
+      <pre><code>class A {
+    void print() {
+        System.out.println("A");
+    }
+}
+
+class B extends A {
+    void print() {
+        System.out.println("B");
+    }
+
+    void onlyB() {
+        System.out.println("Only B");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        A obj = new B();
+        obj.print();
+        obj.onlyB();
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q5</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>interface I {
+    default void show() {
+        System.out.println("Interface");
+    }
+}
+
+class A {
+    public void show() {
+        System.out.println("Class A");
+    }
+}
+
+class B extends A implements I {
+}
+
+public class Main {
+    public static void main(String[] args) {
+        B obj = new B();
+        obj.show();
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q6</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>public class Main {
+    public static void main(String[] args) {
+        try {
+            int[] arr = new int[3];
+            arr[1] = 10 / 2;
+            arr[5] = 20 / 0;
+            System.out.println("Done");
+        }
+        catch (ArithmeticException e) {
+            System.out.println("Arithmetic");
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Array");
+        }
+        finally {
+            System.out.println("Finally");
+        }
+
+        System.out.println("End");
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q7</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>public class Main {
+    static int test() {
+        try {
+            System.out.println("Try");
+            return 10;
+        }
+        catch (Exception e) {
+            System.out.println("Catch");
+            return 20;
+        }
+        finally {
+            System.out.println("Finally");
+            return 30;
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(test());
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q8</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList&lt;Integer&gt; list = new ArrayList&lt;&gt;(
+            Arrays.asList(1, 2, 3, 2, 4, 2)
+        );
+
+        list.remove(2);
+        list.remove(Integer.valueOf(2));
+        list.removeIf(n -&gt; n % 2 == 0);
+
+        System.out.println(list);
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q9</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>public class Main {
+    public static void main(String[] args) {
+        Integer a = 100;
+        Integer b = 100;
+
+        Integer c = 200;
+        Integer d = 200;
+
+        System.out.println(a == b);
+        System.out.println(c == d);
+        System.out.println(c.equals(d));
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q10</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>class Counter {
+    static int count = 0;
+    int id;
+
+    Counter() {
+        count++;
+        id = count;
+    }
+
+    void print() {
+        System.out.println("id=" + id + ", count=" + count);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Counter c1 = new Counter();
+        Counter c2 = new Counter();
+        Counter c3 = c1;
+
+        c3.count++;
+        c2.id = 10;
+
+        c1.print();
+        c2.print();
+        c3.print();
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q11</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>class A {
+    static void show() {
+        System.out.println("Static A");
+    }
+
+    void print() {
+        System.out.println("Print A");
+    }
+}
+
+class B extends A {
+    static void show() {
+        System.out.println("Static B");
+    }
+
+    void print() {
+        System.out.println("Print B");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        A obj = new B();
+        obj.show();
+        obj.print();
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q12</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>public class Main {
+    static int calc(int n) {
+        if (n == 1)
+            return 1;
+
+        if (n % 2 == 0)
+            return n + calc(n - 1);
+
+        return n * calc(n - 1);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(calc(5));
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q13</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>class Animal {
+    Animal() {
+        System.out.println("Animal constructor");
+    }
+
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    Dog() {
+        System.out.println("Dog constructor");
+    }
+
+    void sound() {
+        System.out.println("Dog sound");
+    }
+}
+
+class BabyDog extends Dog {
+    BabyDog() {
+        System.out.println("BabyDog constructor");
+    }
+
+    void sound() {
+        super.sound();
+        System.out.println("BabyDog sound");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal a = new BabyDog();
+        a.sound();
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q14</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>public class Main {
+    public static void main(String[] args) {
+        String s1 = "Java";
+        String s2 = "Ja" + "va";
+        String s3 = new String("Java");
+        String s4 = s3.intern();
+
+        System.out.println(s1 == s2);
+        System.out.println(s1 == s3);
+        System.out.println(s1 == s4);
+        System.out.println(s1.equals(s3));
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <section class="question">
+      <h2>Q15</h2>
+      <p class="task">Determine the exact output.</p>
+      <pre><code>class MyException extends Exception {
+    MyException(String msg) {
+        super(msg);
+    }
+}
+
+class Check {
+    static void validate(int x) throws MyException {
+        if (x &lt; 0)
+            throw new MyException("Negative");
+        else if (x == 0)
+            throw new ArithmeticException("Zero");
+        else
+            System.out.println("Valid");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            Check.validate(-5);
+            Check.validate(0);
+            Check.validate(10);
+        }
+        catch (ArithmeticException e) {
+            System.out.println("Arithmetic: " + e.getMessage());
+        }
+        catch (MyException e) {
+            System.out.println("Custom: " + e.getMessage());
+        }
+        finally {
+            System.out.println("Finally block");
+        }
+
+        System.out.println("After try");
+    }
+}</code></pre>
+      <div class="answer-box"><strong>Your answer:</strong></div>
+    </section>
+
+    <footer>
+      Hard Java Tracing Practice — Constructors, Inheritance, Polymorphism, Exceptions, ArrayList, Autoboxing, Strings
+    </footer>
+  </div>
+</body>
+</html>
